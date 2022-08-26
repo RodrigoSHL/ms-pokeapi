@@ -8,7 +8,7 @@ export class PokeapiService {
     const response = await axios.get<IPokeapi>(
       `https://pokeapi.co/api/v2/pokemon/${id}`,
     );
-    const arrTypes: any[] = [];
+    const arrTypes: string[] = [];
     response.data.types.forEach((type) => arrTypes.push(type.type.name));
     const pokemon: IPokemon = {
       id: id,
