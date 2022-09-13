@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { PokeapiModule } from './pokeapi/pokeapi.module';
 
 @Module({
-  imports: [PokeapiModule],
+  imports: [PokeapiModule, CacheModule.register({ isGlobal: true })],
   controllers: [],
   providers: [],
 })
