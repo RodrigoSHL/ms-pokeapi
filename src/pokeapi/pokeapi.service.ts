@@ -12,20 +12,20 @@ export class PokeapiService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
   async getNameByPokeId(id: string): Promise<any> {
-    // check if data is in cache:
-    const cachedData = await this.cacheManager.get<{ name: string }>(
-      id.toString(),
-    );
-    if (cachedData) {
-      console.log(`Getting data from cache!`);
-      return `${cachedData.name}`;
+    try {
+      const cachedData = await this.cacheManager.get(id.toString());
+      if (cachedData) {
+        console.log(`Getting data from cache!`);
+        return `${cachedData}`;
+      }
+      // if not, call API and set the cache:
+      const { data } = await this.httpService.axiosRef.get(
+        `https://pokeapi.co/api/v2/pokemon/${id}`,
+      );
+      await this.cacheManager.set(id.toString(), data);
+      return await `${data.name}`;
+    } catch (error) {
+      console.log('error', error);
     }
-
-    // if not, call API and set the cache:
-    const { data } = await this.httpService.axiosRef.get(
-      `https://pokeapi.co/api/v2/pokemon/${id}`,
-    );
-    await this.cacheManager.set(id.toString(), data);
-    return await `${data.name}`;
   }
 }
